@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ProperousAI</string>
+    <string name="imageloader" >image loading from url</string>
+    <string name="proceed">Proceed</string>
 </resources>

@@ -21,7 +21,6 @@ interface Account {
 
 class AccountImpl(accountType: String,accountOwner:String="") : Account {
     private val mutex = Mutex()
-    private val scope = CoroutineScope(Dispatchers.Default)
     override val name: String
         get() = name
     override var balance: Double = 0.0
