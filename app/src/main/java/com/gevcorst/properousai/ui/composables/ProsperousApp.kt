@@ -22,7 +22,7 @@ fun ProsperousApp() {
             Scaffold(modifier = Modifier.fillMaxSize(),
                 topBar = {
                     CustomAppBar(
-                        title = Accounts.label,
+                        title = appState.screenName,
                         icon = Accounts.icon, modifier = Modifier
                     ){appState.navController.navigateUp()}
                 }, content = {it.toString()

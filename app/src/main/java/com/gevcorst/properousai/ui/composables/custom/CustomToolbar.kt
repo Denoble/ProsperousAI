@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -72,14 +73,14 @@ private fun toolbarColor(darkTheme: Boolean = isSystemInDarkTheme()): Color {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomAppBar(title: String, icon: ImageVector,modifier: Modifier, iconClickAction: () -> Unit) {
+fun CustomAppBar(title:MutableState< String>, icon: ImageVector,modifier: Modifier, iconClickAction: () -> Unit) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = { Text(text = title.value) },
         modifier = modifier,
         navigationIcon = {
             Icon(
                 icon,
-                contentDescription = title,
+                contentDescription = title.value,
                 modifier = Modifier.clickable(onClick = { iconClickAction.invoke() })
             )
         },

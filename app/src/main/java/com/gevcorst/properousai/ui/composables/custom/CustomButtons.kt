@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 
@@ -27,7 +28,7 @@ fun BasicButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
         modifier = modifier,
         colors =
         ButtonDefaults.buttonColors(
-            contentColor = MaterialTheme.colorScheme.primary
+            contentColor = Color.White
         )
     ) {
         Text(text = stringResource(text), fontSize = 16.sp)

@@ -1,5 +1,7 @@
 package com.gevcorst.properousai.ui.composables.custom
 
+import android.content.res.Resources.Theme
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -22,9 +25,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.gevcorst.properousai.ui.theme.MilkyWhite
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.gevcorst.properousai.R.drawable as AppIcons
@@ -73,28 +82,23 @@ fun CustomBottomSheet(
                         start.linkTo(parent.start, margin = 16.dp)
                         width = Dimension.fillToConstraints
                         height = Dimension.wrapContent
-                    } , onClickAction = { })
-                    CustomImage(url =
-                    LocalContext.current.getDrawable ( AppIcons.baseline_close_24).toString(),
+                        baseline.linkTo(closeImage.baseline)
+                    } , onClickAction = { }, textStyle = TextStyle(textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold, fontSize = 16.sp))
+                    Icon(
+                        painter = painterResource(id = AppIcons.baseline_close_24),
+                        contentDescription = "",
                         modifier = Modifier
                             .constrainAs(closeImage) {
                                 top.linkTo(titleText.top)
-                                start.linkTo(titleText.end, margin = 8.dp)
                                 end.linkTo(parent.end, margin = 16.dp)
-                                width = Dimension.fillToConstraints
+                                width = Dimension.value(30.dp)
                                 height = Dimension.wrapContent
                             }
                             .clickable {
                                 isBottomSheetVisible.value = false
-                            }, )
-                    BasicTextButton(
-                        text = AppText.proceed,
-                        modifier = Modifier.constrainAs(button){
-                            top.linkTo(titleText.bottom,margin =16.dp)
-                            end.linkTo(closeImage.end)
-                        }) {
-                        //Run Action
-                    }
+                            },tint= Color.Red
+                    )
                 }
 
             }
