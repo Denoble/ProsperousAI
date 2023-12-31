@@ -2,6 +2,7 @@ package com.gevcorst.properousai
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -18,6 +19,6 @@ object Accounts :NavDestinations{
 }
 object Transaction :NavDestinations{
     override val label: String = "Transaction"
-    override val icon: ImageVector = Icons.Filled.ShoppingCart
+    override val icon: ImageVector = Icons.Default.Info
     override val route:String =  "Transaction"
 }

@@ -46,6 +46,7 @@ fun HomeScreen(
     ProperousAITheme {
         Surface() {
             appState.screenName.value = screenName
+            appState.screenIcon.value = icon
             if (isBottomSheetVisible.value) {
                 CustomBottomSheet(title = "Send Money",
                     background = MaterialTheme.colorScheme.background,

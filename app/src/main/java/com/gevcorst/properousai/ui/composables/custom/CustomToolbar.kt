@@ -73,13 +73,15 @@ private fun toolbarColor(darkTheme: Boolean = isSystemInDarkTheme()): Color {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomAppBar(title:MutableState< String>, icon: ImageVector,modifier: Modifier, iconClickAction: () -> Unit) {
+fun CustomAppBar(title:MutableState< String>,
+                 icon:MutableState< ImageVector>,modifier: Modifier,
+                 iconClickAction: () -> Unit) {
     TopAppBar(
         title = { Text(text = title.value) },
         modifier = modifier,
         navigationIcon = {
             Icon(
-                icon,
+                icon.value,
                 contentDescription = title.value,
                 modifier = Modifier.clickable(onClick = { iconClickAction.invoke() })
             )

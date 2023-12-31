@@ -23,7 +23,8 @@ fun ProsperousApp() {
                 topBar = {
                     CustomAppBar(
                         title = appState.screenName,
-                        icon = Accounts.icon, modifier = Modifier
+                        icon = appState.screenIcon,
+                        modifier = Modifier
                     ){appState.navController.navigateUp()}
                 }, content = {it.toString()
                     NavHost(navController = appState.navController,
