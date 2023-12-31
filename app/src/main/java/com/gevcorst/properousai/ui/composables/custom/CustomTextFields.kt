@@ -48,7 +48,7 @@ fun CustomText(
     text: String, modifier: Modifier,
     textStyle: TextStyle = TextStyle(
         fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.Bold, fontSize = 13.sp,
+        fontWeight = FontWeight.Normal, fontSize = 13.sp,
     ),
     onClickAction: () -> Unit,
     textAlign: TextAlign = TextAlign.Start
