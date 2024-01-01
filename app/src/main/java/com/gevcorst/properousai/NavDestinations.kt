@@ -18,7 +18,7 @@ object Accounts :NavDestinations{
     override val route:String =  "Accounts"
 }
 object Transaction :NavDestinations{
-    override val label: String = "Transaction"
+    override val label: String = "Transactions"
     override val icon: ImageVector = Icons.Default.Info
-    override val route:String =  "Transaction"
+    override val route:String =  "Transactions"
 }

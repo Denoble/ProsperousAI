@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,20 +28,29 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BasicField(
-    @StringRes text: Int,
-    value: String,
-    onNewValue: (String) -> Unit,
-    modifier: Modifier = Modifier
+fun CustomOutlinedTextField(
+    label: String,
+    value:String,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    placeHolderText: String,
+    modifier: Modifier,
+    keyboardType: KeyboardType,
+    onTextChange:(text:String)->Unit
+
 ) {
-    OutlinedTextField(
-        singleLine = true,
-        modifier = modifier,
+    TextField(
         value = value,
-        onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) }
+        modifier = modifier,
+        label = { Text(text = label) },
+        placeholder = { Text(text = placeHolderText) },
+        visualTransformation = visualTransformation,
+        onValueChange = {
+            onTextChange(it)
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

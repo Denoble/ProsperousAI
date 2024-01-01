@@ -3,4 +3,5 @@
     <string name="imageloader" >image loading from url</string>
     <string name="proceed">Proceed</string>
     <string name="sendButton">SendMoney</string>
+    <string name="enter_amount">Enter Amount</string>
 </resources>

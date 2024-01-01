@@ -15,7 +15,10 @@ import androidx.navigation.NavHostController
 import com.gevcorst.properousai.ui.composables.HomeScreen
 import com.gevcorst.properousai.ui.composables.ProsperousApp
 import com.gevcorst.properousai.ui.theme.ProperousAITheme
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

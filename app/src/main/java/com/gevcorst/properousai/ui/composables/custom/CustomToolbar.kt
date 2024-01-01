@@ -101,31 +101,3 @@ fun ValidationError(msg:String,modifier: Modifier) {
         .wrapContentWidth()
         .wrapContentHeight())
 }
-@Composable
-fun CustomImage(
-    url: String,
-    contentScale: ContentScale = ContentScale.Fit,
-    modifier: Modifier
-) {
-    val painter =
-        rememberAsyncImagePainter(
-            ImageRequest.Builder //Used while loading
-                (LocalContext.current).data(data = url)
-                .apply(block = fun ImageRequest.Builder.() {
-                    crossfade(true) //Crossfade animation between images
-                    placeholder(AppIcons.loading_img) //Used while loading
-                    fallback(AppIcons.ic_baseline_broken_image_24) //Used if data is null
-                    error(AppIcons.network_error) //Used when loading returns with error
-                }).build()
-        )
-
-
-    Image(
-        modifier = modifier,
-        //Use painter in Image composable
-        painter = painter,
-        contentScale = contentScale,
-        contentDescription = stringResource(id = AppText.imageloader)
-    )
-
-}
