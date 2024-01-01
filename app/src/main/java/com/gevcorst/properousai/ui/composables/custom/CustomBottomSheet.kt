@@ -151,6 +151,7 @@ fun TransferCustomBottomSheet(
                             viewModel.toAccount.value,
                             viewModel.amountInputState.value.toDouble())
                         viewModel.amountInputState.value =""
+                        isBottomSheetVisible.value =false
                     }
 
                 }
