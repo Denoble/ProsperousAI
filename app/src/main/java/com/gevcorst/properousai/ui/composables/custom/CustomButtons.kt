@@ -1,6 +1,8 @@
 package com.gevcorst.properousai.ui.composables.custom
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +20,7 @@ fun BasicTextButton(@StringRes text:Int,
                     modifier: Modifier, action: () -> Unit) {
     TextButton(onClick = action, modifier = modifier) {
         Text(text = stringResource(text))
+        modifier.wrapContentHeight()
     }
 }
 
@@ -25,13 +28,13 @@ fun BasicTextButton(@StringRes text:Int,
 fun BasicButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
     Button(
         onClick = action,
-        modifier = modifier,
+        modifier = modifier.wrapContentSize(),
         colors =
         ButtonDefaults.buttonColors(
             contentColor = Color.White
         )
     ) {
-        Text(text = stringResource(text), fontSize = 16.sp)
+        Text(text = stringResource(text), fontSize = 12.sp)
     }
 }
 

@@ -2,7 +2,6 @@ package com.gevcorst.properousai.ui.composables
 
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,16 +12,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,31 +27,50 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.constraintlayout.compose.VerticalAlign
-import com.gevcorst.properousai.ui.composables.custom.CustomBottomSheet
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.gevcorst.properousai.ui.composables.custom.TransferCustomBottomSheet
 import com.gevcorst.properousai.ui.composables.custom.CustomText
+import com.gevcorst.properousai.ui.composables.custom.DepositCustomBottomSheet
 import com.gevcorst.properousai.ui.composables.custom.isBottomSheetVisible
+import com.gevcorst.properousai.ui.composables.custom.isDepositBottomSheetVisible
 import com.gevcorst.properousai.ui.theme.MilkyWhite
 import com.gevcorst.properousai.ui.theme.ProperousAITheme
+import com.gevcorst.properousai.utility.currencySymbol
+import com.gevcorst.properousai.viewModel.AccountViewModel
 import com.gevcorst.properousai.R.drawable as APPIcons
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    screenName: String, icon: ImageVector, appState: AppState
+    screenName: String,
+    icon: ImageVector,
+    appState: AppState,viewModel:AccountViewModel = hiltViewModel()
 ) {
+    val uiState  =  viewModel.accountsUIState
     ProperousAITheme {
-        Surface() {
+        Surface {
             appState.screenName.value = screenName
             appState.screenIcon.value = icon
             if (isBottomSheetVisible.value) {
-                CustomBottomSheet(title = "Move funds between Accounts",
+                TransferCustomBottomSheet(title = "Move funds between Accounts",
                     background = MaterialTheme.colorScheme.background,
                     modifier = Modifier.padding(4.dp),
-                    onDismiss = { isBottomSheetVisible.value = false })
+                    viewModel = viewModel,
+                    onDismiss = { viewModel.onAmountInputChange("")
+                        isBottomSheetVisible.value = false
+                    })
             }
-            Column() {
+            if(isDepositBottomSheetVisible.value){
+                DepositCustomBottomSheet(title = "Deposit to Account",
+                    background = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.padding(4.dp),
+                    viewModel = viewModel,
+                    onDismiss = { viewModel.onAmountInputChange("")
+                        isBottomSheetVisible.value = false
+                    })
+            }
+            Column {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -111,7 +126,7 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "VMProperty",
+                        CustomText(text = "$currencySymbol ${ uiState.value.checking}",
                             modifier = Modifier.constrainAs(checking) {
                                 top.linkTo(checkingLabel.bottom, margin = 4.dp)
                                 start.linkTo(checkingLabel.start)
@@ -132,7 +147,7 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "VMProperty",
+                        CustomText(text ="$currencySymbol ${uiState.value.family}",
                             modifier = Modifier.constrainAs(family) {
                                 top.linkTo(familyLabel.bottom, margin = 4.dp)
                                 start.linkTo(familyLabel.start)
@@ -154,7 +169,7 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "VMProperty",
+                        CustomText(text = "$currencySymbol ${uiState.value.saving}",
                             modifier = Modifier.constrainAs(savings) {
                                 top.linkTo(savingsLabel.bottom, margin = 4.dp)
                                 start.linkTo(savingsLabel.start)
@@ -252,7 +267,8 @@ fun HomeScreen(
                                 end.linkTo(depositACheckIcon.end)
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
-                            }, onClickAction = {}, textStyle = TextStyle(
+                            }, onClickAction = { isDepositBottomSheetVisible.value = true},
+                            textStyle = TextStyle(
                                 color= MaterialTheme.colorScheme.inversePrimary
                             ), textAlign = TextAlign.Center
                         )

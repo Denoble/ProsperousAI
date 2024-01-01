@@ -22,9 +22,7 @@ import com.gevcorst.properousai.ui.composables.AppState
 
 @Composable
 fun BottomNavigationBar(appState: AppState ,
-                         saveState: MutableState<Boolean> = remember {
-                             mutableStateOf(false) },
-                       modifier: Modifier =Modifier) {
+                        modifier: Modifier =Modifier) {
     val screens = listOf(
         Accounts, Transaction)
     NavigationBar(modifier = modifier,

@@ -59,39 +59,39 @@ fun CustomDropdownMenu(
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-        Column(modifier.padding(20.dp)) {
+    Column(modifier.padding(20.dp)) {
 
-            TextField(
-                value = selectedItem,
-                onValueChange = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .onGloballyPositioned { coordinates ->
-                        textFieldSize = coordinates.size.toSize()
-                    },
-                label = { Text(name) },
-                trailingIcon = {
-                    Icon(icon, "contentDescription",
-                        Modifier.clickable { isExpanded = !isExpanded })
-                }
-            )
-            DropdownMenu(
-                expanded = isExpanded,
-                modifier = modifier
-                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
-                onDismissRequest = { isExpanded = false }
-            ) {
-                options.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        text = { Text(text = selectionOption) },
-                        onClick = {
-                            isExpanded = false
-                            selectedItem = selectionOption
-                            onActionClick(selectionOption)
-                        }, colors = MenuDefaults.itemColors(textColor = Color.Black)
-                    )
-                }
+        TextField(
+            value = selectedItem,
+            onValueChange = { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                },
+            label = { Text(name) },
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { isExpanded = !isExpanded })
             }
+        )
+        DropdownMenu(
+            expanded = isExpanded,
+            modifier = modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
+            onDismissRequest = { isExpanded = false }
+        ) {
+            options.forEach { selectionOption ->
+                DropdownMenuItem(
+                    text = { Text(text = selectionOption) },
+                    onClick = {
+                        isExpanded = false
+                        selectedItem = selectionOption
+                        onActionClick(selectionOption)
+                    }, colors = MenuDefaults.itemColors(textColor = Color.Black)
+                )
+            }
+        }
     }
 }

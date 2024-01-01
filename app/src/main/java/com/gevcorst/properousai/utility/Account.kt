@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
+import java.util.Currency
+import java.util.Locale
 
 interface Account {
     val name: String
@@ -89,3 +91,5 @@ class AccountImpl(accountType: String,accountOwner:String="") : Account {
     }
 }
 enum class TransactionType{DEBIT,CREDIT}
+val currency = Currency.getInstance(Locale.getDefault())
+val currencySymbol = currency.currencyCode
