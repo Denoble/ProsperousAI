@@ -1,5 +1,7 @@
 package com.gevcorst.properousai.ui.composables.custom
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -37,9 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gevcorst.properousai.utility.accountsDropDownList
 import com.gevcorst.properousai.viewModel.AccountViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import com.gevcorst.properousai.R.drawable as AppIcons
 import com.gevcorst.properousai.R.string as AppText
 
@@ -47,6 +47,7 @@ var isBottomSheetVisible = mutableStateOf(false)
 var isDepositBottomSheetVisible = mutableStateOf(false)
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferCustomBottomSheet(
@@ -118,18 +119,16 @@ fun TransferCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent},
                         verticalArrangement = Arrangement.Center) {
-                        CustomDropdownMenu(options = listOf(
-                            "Checking","Savings","Family") ,name ="From",
+                        CustomDropdownMenu(options = accountsDropDownList,name ="From",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
                             onActionClick = {viewModel.fromAccount.value = it} )
-                        CustomDropdownMenu(options = listOf(
-                            "Checking","Savings","Family") ,name ="To",
+                        CustomDropdownMenu(options = accountsDropDownList,name ="To",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            onActionClick = {viewModel.fromAccount.value = it} )
+                            onActionClick = {viewModel.toAccount.value = it} )
                         CustomOutlinedTextField(
                             label = stringResource(id = AppText.enter_amount),
                             value = "${viewModel.amountInputState.value}",
@@ -148,7 +147,10 @@ fun TransferCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent
                     }) {
-
+                        viewModel.transfer(viewModel.fromAccount.value,
+                            viewModel.toAccount.value,
+                            viewModel.amountInputState.value.toDouble())
+                        viewModel.amountInputState.value =""
                     }
 
                 }
@@ -158,6 +160,7 @@ fun TransferCustomBottomSheet(
         }
     }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepositCustomBottomSheet(
@@ -228,12 +231,11 @@ fun DepositCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent},
                         verticalArrangement = Arrangement.Center) {
-                        CustomDropdownMenu(options = listOf(
-                            "Checking","Savings","Family") ,name ="To",
+                        CustomDropdownMenu(options = accountsDropDownList ,name ="To",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            onActionClick = {viewModel.fromAccount.value = it} )
+                            onActionClick = {viewModel.toAccount.value = it} )
                         CustomOutlinedTextField(
                             label = stringResource(id = AppText.enter_amount),
                             value = "${viewModel.amountInputState.value}",
@@ -252,7 +254,10 @@ fun DepositCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent
                     }) {
-
+                        viewModel.deposit(viewModel.toAccount.value,
+                            viewModel.amountInputState.value.toDouble())
+                        isDepositBottomSheetVisible.value = false
+                        viewModel.amountInputState.value = ""
                     }
 
                 }

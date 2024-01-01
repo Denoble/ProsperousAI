@@ -1,6 +1,8 @@
 package com.gevcorst.properousai.ui.composables
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,14 +42,17 @@ import com.gevcorst.properousai.viewModel.AccountViewModel
 import com.gevcorst.properousai.R.drawable as APPIcons
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     screenName: String,
     icon: ImageVector,
-    appState: AppState,viewModel:AccountViewModel = hiltViewModel()
+    appState: AppState, viewModel: AccountViewModel = hiltViewModel()
 ) {
-    val uiState  =  viewModel.accountsUIState
+    val checkingUIState = viewModel.checkingAccountsUIState
+    val familyUIState = viewModel.familyAccountsUIState
+    val savingsUIState = viewModel.savingsAccountsUIState
     ProperousAITheme {
         Surface {
             appState.screenName.value = screenName
@@ -57,16 +62,18 @@ fun HomeScreen(
                     background = MaterialTheme.colorScheme.background,
                     modifier = Modifier.padding(4.dp),
                     viewModel = viewModel,
-                    onDismiss = { viewModel.onAmountInputChange("")
+                    onDismiss = {
+                        viewModel.onAmountInputChange("")
                         isBottomSheetVisible.value = false
                     })
             }
-            if(isDepositBottomSheetVisible.value){
+            if (isDepositBottomSheetVisible.value) {
                 DepositCustomBottomSheet(title = "Deposit to Account",
                     background = MaterialTheme.colorScheme.background,
                     modifier = Modifier.padding(4.dp),
                     viewModel = viewModel,
-                    onDismiss = { viewModel.onAmountInputChange("")
+                    onDismiss = {
+                        viewModel.onAmountInputChange("")
                         isBottomSheetVisible.value = false
                     })
             }
@@ -126,7 +133,7 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "$currencySymbol ${ uiState.value.checking}",
+                        CustomText(text = "$currencySymbol ${checkingUIState.value}",
                             modifier = Modifier.constrainAs(checking) {
                                 top.linkTo(checkingLabel.bottom, margin = 4.dp)
                                 start.linkTo(checkingLabel.start)
@@ -147,7 +154,8 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text ="$currencySymbol ${uiState.value.family}",
+                        CustomText(text = "$currencySymbol ${
+                            familyUIState.value}",
                             modifier = Modifier.constrainAs(family) {
                                 top.linkTo(familyLabel.bottom, margin = 4.dp)
                                 start.linkTo(familyLabel.start)
@@ -169,7 +177,8 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "$currencySymbol ${uiState.value.saving}",
+                        CustomText(text = "$currencySymbol ${savingsUIState.
+                        value}",
                             modifier = Modifier.constrainAs(savings) {
                                 top.linkTo(savingsLabel.bottom, margin = 4.dp)
                                 start.linkTo(savingsLabel.start)
@@ -189,7 +198,7 @@ fun HomeScreen(
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
                     colors = CardDefaults.cardColors(containerColor = MilkyWhite)
-                ){
+                ) {
                     ConstraintLayout(
                         modifier = Modifier
                             .fillMaxSize()
@@ -218,7 +227,8 @@ fun HomeScreen(
                                 width = Dimension.value(60.dp)
                                 height = Dimension.value(40.dp)
                             })
-                        CustomText(text = "Transfer to Family",
+                        CustomText(
+                            text = "Transfer to Family",
                             modifier = Modifier.constrainAs(transferTofamily) {
                                 top.linkTo(transferTofamilyIcon.bottom)
                                 start.linkTo(transferTofamilyIcon.start)
@@ -239,11 +249,12 @@ fun HomeScreen(
                                 width = Dimension.value(60.dp)
                                 height = Dimension.value(40.dp)
                             })
-                        CustomText(text = "Transfer to Savings",
+                        CustomText(
+                            text = "Transfer to Savings",
                             modifier = Modifier.constrainAs(transferToSaving) {
-                                top.linkTo(transferToSavingIcon.bottom,)
+                                top.linkTo(transferToSavingIcon.bottom)
                                 end.linkTo(transferToSavingIcon.end)
-                                start.linkTo(transferToSavingIcon.start,)
+                                start.linkTo(transferToSavingIcon.start)
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             },
@@ -267,9 +278,9 @@ fun HomeScreen(
                                 end.linkTo(depositACheckIcon.end)
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
-                            }, onClickAction = { isDepositBottomSheetVisible.value = true},
+                            }, onClickAction = { isDepositBottomSheetVisible.value = true },
                             textStyle = TextStyle(
-                                color= MaterialTheme.colorScheme.inversePrimary
+                                color = MaterialTheme.colorScheme.inversePrimary
                             ), textAlign = TextAlign.Center
                         )
                     }

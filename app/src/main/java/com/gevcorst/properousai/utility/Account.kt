@@ -1,95 +1,85 @@
 package com.gevcorst.properousai.utility
 
 import android.util.Log
+import androidx.compose.runtime.MutableDoubleState
 import com.gevcorst.properousai.model.Transaction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import java.util.Currency
 import java.util.Locale
 
-interface Account {
-    val name: String
-    val balance: Double
-    val transactions: MutableList<Transaction>
-        get() = mutableListOf<Transaction>()
+private val mutex = Mutex()
 
-    suspend fun balance(): Flow<Double>
-    suspend fun addTransaction(transaction: Transaction, type:TransactionType):Flow<String>
-    suspend fun transactions(): Flow<List<Transaction>>
-}
 
-class AccountImpl(accountType: String,accountOwner:String="") : Account {
-    private val mutex = Mutex()
-    override val name: String
-        get() = name
-    override var balance: Double = 0.0
-        get() = balance
-
-    override suspend fun balance(): Flow<Double>  = flow{
-                mutex.lock()
-                try {
-                   emit( balance)
-                } catch (e: Exception) {
-                    Log.d("GetBalance", e.stackTraceToString())
-                    emit(Double.MIN_VALUE)
-                } finally {
-                    mutex.unlock()
+suspend fun addTransaction(
+    transaction: Transaction, account: MutableDoubleState,
+    type: TransactionType
+): Flow<String> = flow {
+    mutex.lock()
+    try {
+        when (type) {
+            TransactionType.CREDIT -> {
+                credit(transaction, account).collect() {
+                    account.value = it
                 }
-    }
+            }
 
-    override suspend fun addTransaction(transaction: Transaction,
-                                        type: TransactionType): Flow<String> = flow {
-        mutex.lock()
-        try{
-            when(type){
-                TransactionType.CREDIT ->{
-                   credit(transaction)
-                }
-                TransactionType.DEBIT ->{
-                    if(balance > transaction.amount){
-                       debit(transaction)
+            TransactionType.DEBIT -> {
+                if (account.value > transaction.amount) {
+                    debit(transaction, account).collect {
+                        account.value = it
                     }
                 }
             }
-        }catch (e:Exception){
-            val errorMessage = e.stackTraceToString()
-            Log.d("GetBalance", errorMessage)
-            emit(errorMessage)
-        }finally {
-            mutex.unlock()
         }
-
+    } catch (e: Exception) {
+        val errorMessage = e.stackTraceToString()
+        Log.d("GetBalance", errorMessage)
+        emit(errorMessage)
+    } finally {
+        mutex.unlock()
     }
 
-    override suspend fun transactions(): Flow<List<Transaction>>  = flow{
-        mutex.lock()
-        try {
-            emit(transactions)
-        }catch (e:Exception){
-            Log.d("GetTransaction", e.stackTraceToString())
-            emit(emptyList())
-        }finally {
-            mutex.unlock()
-        }
-    }
+}
 
-    private suspend fun debit(transaction:Transaction):Flow<String> = flow {
-        balance-=transaction.amount
-        transactions.add(transaction)
-        emit("${transaction.amount} was debited to your account.\n" +
-                "Current balance is $balance")
-    }
-
-    private suspend fun credit(transaction: Transaction):Flow<String>  = flow{
-        balance+= transaction.amount
-        transactions.add(transaction)
-        emit("${transaction.amount} was credited to your account.\n" +
-                "Current balance is $balance")
+suspend fun transactions(): Flow<List<Transaction>> = flow {
+    mutex.lock()
+    try {
+        emit(transactions)
+    } catch (e: Exception) {
+        Log.d("GetTransaction", e.stackTraceToString())
+        emit(emptyList())
+    } finally {
+        mutex.unlock()
     }
 }
-enum class TransactionType{DEBIT,CREDIT}
-val currency = Currency.getInstance(Locale.getDefault())
-val currencySymbol = currency.currencyCode
+
+private suspend fun debit(
+    transaction: Transaction,
+    account: MutableDoubleState
+): Flow<Double> = flow {
+    val balance = account.value - transaction.amount
+    transactions.add(transaction)
+    emit(balance)
+}
+
+private suspend fun credit(
+    transaction: Transaction,
+    account: MutableDoubleState
+): Flow<Double> = flow {
+    val balance = transaction.amount + account.value
+    transactions.add(transaction)
+    emit(balance)
+}
+
+enum class TransactionType { DEBIT, CREDIT }
+enum class AccountType { CHECKING, FAMILY, SAVINGS }
+
+val currency: Currency = Currency.getInstance(Locale.getDefault())
+val currencySymbol: String = currency.currencyCode
+val transactions = mutableListOf<Transaction>()
+val accountsDropDownList = listOf<String>(
+    AccountType.CHECKING.name, AccountType.FAMILY.name,
+    AccountType.SAVINGS.name
+)

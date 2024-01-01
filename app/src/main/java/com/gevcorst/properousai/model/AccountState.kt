@@ -1,9 +1,11 @@
 package com.gevcorst.properousai.model
 
+import androidx.compose.runtime.mutableDoubleStateOf
 
 
-data class AccountState(
-    val checking:Double = 560.10,
-    val saving: Double = 20000.85,
-    val family: Double = 3654.0,
-)
+import com.gevcorst.properousai.utility.AccountType
+
+
+val checkingAccountBalance = mutableDoubleStateOf(560.10)
+val familyAccountBalance = mutableDoubleStateOf(3654.98)
+val savingAccountBalance = mutableDoubleStateOf(20000.85)
