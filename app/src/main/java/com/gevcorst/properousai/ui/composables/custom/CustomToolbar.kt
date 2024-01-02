@@ -36,40 +36,6 @@ import com.gevcorst.properousai.R.string as AppText
 import com.gevcorst.properousai.R.drawable as AppIcons
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BasicToolbar(@StringRes title: Int) {
-    TopAppBar(title = { Text(stringResource(title)) }, colors =
-    TopAppBarDefaults.largeTopAppBarColors(containerColor = toolbarColor()))
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ActionToolbar(
-    @StringRes title: Int,
-    @DrawableRes endActionIcon: Int,
-    modifier: Modifier,
-    endAction: () -> Unit
-) {
-    TopAppBar(
-        title = { Text(stringResource(title)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            contentColorFor(backgroundColor = toolbarColor())
-        ),
-        actions = {
-            Box(modifier) {
-                IconButton(onClick = endAction) {
-                    Icon(painter = painterResource(endActionIcon), contentDescription = "Action")
-                }
-            }
-        }
-    )
-}
-
-@Composable
-private fun toolbarColor(darkTheme: Boolean = isSystemInDarkTheme()): Color {
-    return if (darkTheme) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,11 +59,4 @@ fun CustomAppBar(title:MutableState< String>,
        )
 
     )
-}
-@Composable
-fun ValidationError(msg:String,modifier: Modifier) {
-    Text(text = msg, fontSize = 12.sp, fontStyle = FontStyle.Italic, color = Color.Red,
-    modifier = Modifier
-        .wrapContentWidth()
-        .wrapContentHeight())
 }

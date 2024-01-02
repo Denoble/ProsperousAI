@@ -58,11 +58,12 @@ var isDepositBottomSheetVisible = mutableStateOf(false)
 fun TransferCustomBottomSheet(
     title: String, background: Color,
     modifier: Modifier,
-    viewModel: AccountViewModel=hiltViewModel(),
-    sheetState: SheetState =rememberModalBottomSheetState(
-        skipPartiallyExpanded = true),
+    viewModel: AccountViewModel = hiltViewModel(),
+    sheetState: SheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    ),
     onDismiss: () -> Unit = { false },
-){
+) {
     val scope = rememberCoroutineScope()
     if (isBottomSheetVisible.value) {
         ModalBottomSheet(
@@ -87,8 +88,8 @@ fun TransferCustomBottomSheet(
                 border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
                 colors = CardDefaults.cardColors(containerColor = MilkyWhite)
             ) {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()){
-                    val(titleText,closeImage,fromDropDown,
+                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+                    val (titleText, closeImage, fromDropDown,
                         amountText,
                         button) = createRefs()
                     CustomText(text = title, modifier = Modifier
@@ -99,8 +100,11 @@ fun TransferCustomBottomSheet(
                             height = Dimension.wrapContent
                             baseline.linkTo(closeImage.baseline)
                         }
-                        .padding(16.dp) , onClickAction = { }, textStyle = TextStyle(textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold, fontSize = 16.sp))
+                        .padding(16.dp), onClickAction = { }, textStyle = TextStyle(
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold, fontSize = 16.sp
+                    )
+                    )
                     Icon(
                         painter = painterResource(id = AppIcons.baseline_close_24),
                         contentDescription = "",
@@ -115,25 +119,28 @@ fun TransferCustomBottomSheet(
                                 viewModel.onAmountInputChange("")
                                 isBottomSheetVisible.value = false
                             }
-                            .padding(top = 16.dp),tint= Color.Red
+                            .padding(top = 16.dp), tint = Color.Red
                     )
-                    Column(modifier  = Modifier.constrainAs(fromDropDown){
-                        top.linkTo(closeImage.bottom, margin = 16.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                        height= Dimension.wrapContent},
-                        verticalArrangement = Arrangement.Center) {
-                        CustomDropdownMenu(options = viewModel.dropDownList,name ="From",
+                    Column(
+                        modifier = Modifier.constrainAs(fromDropDown) {
+                            top.linkTo(closeImage.bottom, margin = 16.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            width = Dimension.fillToConstraints
+                            height = Dimension.wrapContent
+                        },
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CustomDropdownMenu(options = viewModel.dropDownList, name = "From",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            onActionClick = {viewModel.fromAccount.value = it} )
-                        CustomDropdownMenu(options = viewModel.dropDownList,name ="To",
+                            onActionClick = { viewModel.fromAccount.value = it })
+                        CustomDropdownMenu(options = viewModel.dropDownList, name = "To",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            onActionClick = {viewModel.toAccount.value = it} )
+                            onActionClick = { viewModel.toAccount.value = it })
                         CustomOutlinedTextField(
                             label = stringResource(id = AppText.enter_amount),
                             value = "${viewModel.amountInputState.value}",
@@ -143,20 +150,25 @@ fun TransferCustomBottomSheet(
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(20.dp))
+                                .padding(20.dp)
+                        )
                     }
 
-                    BasicButton(text = AppText.proceed , modifier = Modifier.constrainAs(button) {
+                    BasicButton(text = AppText.proceed, modifier = Modifier.constrainAs(button) {
                         top.linkTo(fromDropDown.bottom)
                         end.linkTo(fromDropDown.end, margin = 20.dp)
                         width = Dimension.fillToConstraints
-                        height= Dimension.wrapContent
+                        height = Dimension.wrapContent
                     }) {
-                        viewModel.transfer(viewModel.fromAccount.value,
-                            viewModel.toAccount.value,
-                            viewModel.amountInputState.value.toDouble())
-                        viewModel.amountInputState.value =""
-                        isBottomSheetVisible.value =false
+                        if (viewModel.amountInputState.value.isNullOrBlank().not()) {
+                            viewModel.transfer(
+                                viewModel.fromAccount.value,
+                                viewModel.toAccount.value,
+                                viewModel.amountInputState.value.toDouble()
+                            )
+                            viewModel.amountInputState.value = ""
+                            isBottomSheetVisible.value = false
+                        }
                     }
 
                 }
@@ -166,16 +178,17 @@ fun TransferCustomBottomSheet(
         }
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepositCustomBottomSheet(
     title: String, background: Color,
     modifier: Modifier,
-    viewModel: AccountViewModel=hiltViewModel(),
+    viewModel: AccountViewModel = hiltViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(),
     onDismiss: () -> Unit = { false },
-){
+) {
     if (isDepositBottomSheetVisible.value) {
 
         ModalBottomSheet(
@@ -200,8 +213,8 @@ fun DepositCustomBottomSheet(
                 border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
                 colors = CardDefaults.cardColors(containerColor = MilkyWhite)
             ) {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()){
-                    val(titleText,closeImage,fromDropDown,
+                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+                    val (titleText, closeImage, fromDropDown,
                         amountText,
                         button) = createRefs()
                     CustomText(text = title, modifier = Modifier
@@ -212,8 +225,11 @@ fun DepositCustomBottomSheet(
                             height = Dimension.wrapContent
                             baseline.linkTo(closeImage.baseline)
                         }
-                        .padding(16.dp) , onClickAction = { }, textStyle = TextStyle(textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold, fontSize = 16.sp))
+                        .padding(16.dp), onClickAction = { }, textStyle = TextStyle(
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold, fontSize = 16.sp
+                    )
+                    )
                     Icon(
                         painter = painterResource(id = AppIcons.baseline_close_24),
                         contentDescription = "",
@@ -228,20 +244,23 @@ fun DepositCustomBottomSheet(
                                 viewModel.onAmountInputChange("")
                                 isDepositBottomSheetVisible.value = false
                             }
-                            .padding(top = 16.dp),tint= Color.Red
+                            .padding(top = 16.dp), tint = Color.Red
                     )
-                    Column(modifier  = Modifier.constrainAs(fromDropDown){
-                        top.linkTo(closeImage.bottom, margin = 16.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                        height= Dimension.wrapContent},
-                        verticalArrangement = Arrangement.Center) {
-                        CustomDropdownMenu(options = accountsDropDownList ,name ="To",
+                    Column(
+                        modifier = Modifier.constrainAs(fromDropDown) {
+                            top.linkTo(closeImage.bottom, margin = 16.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            width = Dimension.fillToConstraints
+                            height = Dimension.wrapContent
+                        },
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CustomDropdownMenu(options = accountsDropDownList, name = "To",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            onActionClick = {viewModel.toAccount.value = it} )
+                            onActionClick = { viewModel.toAccount.value = it })
                         CustomOutlinedTextField(
                             label = stringResource(id = AppText.enter_amount),
                             value = "${viewModel.amountInputState.value}",
@@ -251,20 +270,25 @@ fun DepositCustomBottomSheet(
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(20.dp))
+                                .padding(20.dp)
+                        )
                     }
 
-                    BasicButton(text = AppText.proceed , modifier = Modifier.constrainAs(button) {
+                    BasicButton(text = AppText.proceed, modifier = Modifier.constrainAs(button) {
                         top.linkTo(fromDropDown.bottom)
                         end.linkTo(fromDropDown.end, margin = 20.dp)
                         width = Dimension.fillToConstraints
-                        height= Dimension.wrapContent
+                        height = Dimension.wrapContent
                     }) {
+                        if (viewModel.amountInputState.value.isNullOrBlank().not()) {
+                            viewModel.deposit(
+                                viewModel.toAccount.value,
+                                viewModel.amountInputState.value.toDouble()
+                            )
+                            isDepositBottomSheetVisible.value = false
+                            viewModel.amountInputState.value = ""
+                        }
 
-                        viewModel.deposit(viewModel.toAccount.value,
-                            viewModel.amountInputState.value.toDouble())
-                        isDepositBottomSheetVisible.value = false
-                        viewModel.amountInputState.value = ""
                     }
 
                 }
@@ -274,6 +298,7 @@ fun DepositCustomBottomSheet(
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomAlertDialog(

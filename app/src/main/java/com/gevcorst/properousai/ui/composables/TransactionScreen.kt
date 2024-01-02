@@ -36,6 +36,7 @@ import com.gevcorst.properousai.model.Transaction
 import com.gevcorst.properousai.ui.composables.custom.CustomText
 import com.gevcorst.properousai.ui.theme.MilkyWhite
 import com.gevcorst.properousai.ui.theme.bluegrey
+import com.gevcorst.properousai.ui.theme.teal20
 import com.gevcorst.properousai.utility.TransactionType
 import com.gevcorst.properousai.utility.currencySymbol
 import com.gevcorst.properousai.viewModel.AccountViewModel
@@ -59,9 +60,10 @@ fun TransactionScreen(
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
-            colors = CardDefaults.cardColors(containerColor = MilkyWhite)
+            colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            ConstraintLayout(modifier = Modifier.fillMaxSize()
+                .background(color =Color.White)) {
                 val (lazyColum) = createRefs()
                 LazyColumn(
                     modifier = Modifier
@@ -99,9 +101,9 @@ fun TransactionContent(transaction: Transaction,appState: AppState,
             .wrapContentHeight()
             .padding(bottom = 48.dp)
             .clickable(onClick = { clickAction.invoke() }),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = RoundedCornerShape(4.dp),
-        border = BorderStroke(3.dp, bluegrey),
+        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(3.dp, Color.White),
         colors = CardDefaults.cardColors(containerColor = bluegrey)
     ) {
         ConstraintLayout(

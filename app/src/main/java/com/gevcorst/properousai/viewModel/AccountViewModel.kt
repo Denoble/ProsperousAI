@@ -51,33 +51,35 @@ init {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun deposit(to: String, amount: Double, type: TransactionType = TransactionType.CREDIT) {
+      if(to.isNullOrBlank().not()){
+          when (to) {
+              AccountType.SAVINGS.name -> {
+                  val account = savingsAccountsUIState
+                  processTransaction(
+                      amount, "Income", type,
+                      account
+                  )
+              }
 
-        when (to) {
-            AccountType.SAVINGS.name -> {
-                val account = savingsAccountsUIState
-                processTransaction(
-                    amount, "Income", type,
-                    account
-                )
-            }
+              AccountType.CHECKING.name -> {
+                  val account = checkingAccountsUIState
+                  processTransaction(
+                      amount, "Income", type,
+                      account
+                  )
+              }
 
-            AccountType.CHECKING.name -> {
-                val account = checkingAccountsUIState
-                processTransaction(
-                    amount, "Income", type,
-                    account
-                )
-            }
+              AccountType.FAMILY.name -> {
+                  val account = familyAccountsUIState
+                  processTransaction(
+                      amount, "Income", type,
+                      account
+                  )
+              }
+          }
+          Log.i("Transaction", transactions.toString())
+      }
 
-            AccountType.FAMILY.name -> {
-                val account = familyAccountsUIState
-                processTransaction(
-                    amount, "Income", type,
-                    account
-                )
-            }
-        }
-        Log.i("Transaction", transactions.toString())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
