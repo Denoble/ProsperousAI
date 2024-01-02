@@ -4,7 +4,7 @@
 This is a simple banking Android app that models transaction between different accounts.
 
 #Features
-.Transfer funds between Checking,Family and Savings Accounts.
+.Transfer funds between Checking,Family and Savings Accounts
 .Deposit money to the accounts
 .View Transactions
 
