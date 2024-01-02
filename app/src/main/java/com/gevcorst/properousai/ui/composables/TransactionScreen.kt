@@ -99,7 +99,7 @@ fun TransactionContent(transaction: Transaction,appState: AppState,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(bottom = 48.dp)
+            .padding(bottom = 16.dp)
             .clickable(onClick = { clickAction.invoke() }),
         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
         shape = RoundedCornerShape(16.dp),
