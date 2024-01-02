@@ -1,6 +1,7 @@
 package com.gevcorst.properousai.ui.composables.custom
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -119,12 +124,12 @@ fun TransferCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent},
                         verticalArrangement = Arrangement.Center) {
-                        CustomDropdownMenu(options = accountsDropDownList,name ="From",
+                        CustomDropdownMenu(options = viewModel.dropDownList,name ="From",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
                             onActionClick = {viewModel.fromAccount.value = it} )
-                        CustomDropdownMenu(options = accountsDropDownList,name ="To",
+                        CustomDropdownMenu(options = viewModel.dropDownList,name ="To",
                             modifier = modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
@@ -255,6 +260,7 @@ fun DepositCustomBottomSheet(
                         width = Dimension.fillToConstraints
                         height= Dimension.wrapContent
                     }) {
+
                         viewModel.deposit(viewModel.toAccount.value,
                             viewModel.amountInputState.value.toDouble())
                         isDepositBottomSheetVisible.value = false
@@ -267,4 +273,46 @@ fun DepositCustomBottomSheet(
 
         }
     }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomAlertDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: ImageVector,
+) {
+    AlertDialog(
+        icon = {
+            Icon(icon, contentDescription = "Example Icon")
+        },
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }

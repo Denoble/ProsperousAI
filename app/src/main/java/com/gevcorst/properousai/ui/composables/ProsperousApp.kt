@@ -1,5 +1,7 @@
 package com.gevcorst.properousai.ui.composables
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +16,7 @@ import com.gevcorst.properousai.ui.composables.custom.BottomNavigationBar
 import com.gevcorst.properousai.ui.composables.custom.CustomAppBar
 import com.gevcorst.properousai.ui.theme.ProperousAITheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProsperousApp() {
     ProperousAITheme {

@@ -1,6 +1,8 @@
 package com.gevcorst.properousai.ui.composables
 
 import android.content.res.Resources
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.SnackbarHostState
@@ -21,6 +23,7 @@ import com.gevcorst.properousai.Accounts
 import com.gevcorst.properousai.Transaction
 import kotlinx.coroutines.CoroutineScope
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.AppNavGraph(appState: AppState){
     composable(route = Accounts.route){
             HomeScreen(screenName = Accounts.label,

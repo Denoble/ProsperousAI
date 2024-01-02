@@ -133,7 +133,8 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "$currencySymbol ${checkingUIState.value}",
+                        CustomText(text = "$currencySymbol ${
+                            String.format("%.2f",checkingUIState.value)}",
                             modifier = Modifier.constrainAs(checking) {
                                 top.linkTo(checkingLabel.bottom, margin = 4.dp)
                                 start.linkTo(checkingLabel.start)
@@ -155,7 +156,7 @@ fun HomeScreen(
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
                         CustomText(text = "$currencySymbol ${
-                            familyUIState.value}",
+                           String.format("%.2f", familyUIState.value)}",
                             modifier = Modifier.constrainAs(family) {
                                 top.linkTo(familyLabel.bottom, margin = 4.dp)
                                 start.linkTo(familyLabel.start)
@@ -177,8 +178,9 @@ fun HomeScreen(
                                 width = Dimension.fillToConstraints
                                 height = Dimension.wrapContent
                             }, onClickAction = {})
-                        CustomText(text = "$currencySymbol ${savingsUIState.
-                        value}",
+                        CustomText(text = "$currencySymbol ${
+                            String.format("%.2f",savingsUIState.
+                        value)}",
                             modifier = Modifier.constrainAs(savings) {
                                 top.linkTo(savingsLabel.bottom, margin = 4.dp)
                                 start.linkTo(savingsLabel.start)
