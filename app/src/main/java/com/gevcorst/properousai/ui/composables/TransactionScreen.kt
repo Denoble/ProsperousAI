@@ -37,6 +37,7 @@ import com.gevcorst.properousai.ui.composables.custom.CustomText
 import com.gevcorst.properousai.ui.theme.MilkyWhite
 import com.gevcorst.properousai.ui.theme.bluegrey
 import com.gevcorst.properousai.utility.TransactionType
+import com.gevcorst.properousai.utility.currencySymbol
 import com.gevcorst.properousai.viewModel.AccountViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -122,7 +123,7 @@ fun TransactionContent(transaction: Transaction,appState: AppState,
                     height = Dimension.wrapContent
                 }, onClickAction = {},
             )
-            CustomText(text = "${amountSign.invoke()}${transaction.amount}",
+            CustomText(text = "${amountSign.invoke()} $currencySymbol ${transaction.amount}",
                 modifier = Modifier.constrainAs(amount) {
                     top.linkTo(date.top)
                     end.linkTo(parent.end, margin = 16.dp)
