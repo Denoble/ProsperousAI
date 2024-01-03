@@ -20,6 +20,7 @@ import com.gevcorst.properousai.utility.date
 import com.gevcorst.properousai.utility.populateTransactions
 import com.gevcorst.properousai.utility.transactions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,43 +43,45 @@ class AccountViewModel @Inject constructor() : ViewModel() {
         get() = savingsAccountsUIState.value
     private val family
         get() = familyAccountsUIState.value
-init {
-    populateTransactions()
-}
+
+    init {
+        populateTransactions()
+    }
+
     fun onAmountInputChange(newAmount: String) {
         amountInputState.value = newAmount
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun deposit(to: String, amount: Double, type: TransactionType = TransactionType.CREDIT) {
-      if(to.isNullOrBlank().not()){
-          when (to) {
-              AccountType.SAVINGS.name -> {
-                  val account = savingsAccountsUIState
-                  processTransaction(
-                      amount, "Income", type,
-                      account
-                  )
-              }
+        if (to.isNullOrBlank().not()) {
+            when (to) {
+                AccountType.SAVINGS.name -> {
+                    val account = savingsAccountsUIState
+                    processTransaction(
+                        amount, "Income", type,
+                        account
+                    )
+                }
 
-              AccountType.CHECKING.name -> {
-                  val account = checkingAccountsUIState
-                  processTransaction(
-                      amount, "Income", type,
-                      account
-                  )
-              }
+                AccountType.CHECKING.name -> {
+                    val account = checkingAccountsUIState
+                    processTransaction(
+                        amount, "Income", type,
+                        account
+                    )
+                }
 
-              AccountType.FAMILY.name -> {
-                  val account = familyAccountsUIState
-                  processTransaction(
-                      amount, "Income", type,
-                      account
-                  )
-              }
-          }
-          Log.i("Transaction", transactions.toString())
-      }
+                AccountType.FAMILY.name -> {
+                    val account = familyAccountsUIState
+                    processTransaction(
+                        amount, "Income", type,
+                        account
+                    )
+                }
+            }
+            Log.i("Transaction", transactions.toString())
+        }
 
     }
 
@@ -89,15 +92,18 @@ init {
         amount: Double
     ) {
         if ((from.isNullOrBlank().not() && to.isNullOrBlank().not())
-            && (from != to)) {
-            Log.i("Deposit", "transfer-> $from to -> $to")
-            processFromAccount(from, amount)
-            processToAccount(to, amount)
+            && (from != to)
+        ) {
+            viewModelScope.launch {
+                async {
+                    processFromAccount(from, amount)
+                }.await()
+                processToAccount(to, amount)
+            }
 
         } else {
             //alertDialog
         }
-        Log.i("Transaction", transactions.toString())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -164,9 +170,9 @@ init {
         des: String, transactionType: TransactionType,
         account: MutableDoubleState
     ) {
-        val transaction = Transaction(amount, date, des,transactionType)
+        val transaction = Transaction(amount, date, des, transactionType)
         viewModelScope.launch {
-            addTransaction(transaction, account, transactionType).collect{
+            addTransaction(transaction, account, transactionType).collect {
 
             }
         }

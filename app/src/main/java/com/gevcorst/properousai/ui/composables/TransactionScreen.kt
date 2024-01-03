@@ -79,7 +79,7 @@ fun TransactionScreen(
 
                 ){
                     items (viewModel.transactionList){transaction ->
-                        TransactionContent( transaction,  appState) {
+                        TransactionContent( transaction) {
                            /* appState.navController.navigate(""){
                                 launchSingleTop = true
                             }*/
@@ -93,7 +93,7 @@ fun TransactionScreen(
 }
 
 @Composable
-fun TransactionContent(transaction: Transaction,appState: AppState,
+fun TransactionContent(transaction: Transaction,
                        clickAction: () -> Unit) {
     Card(
         modifier = Modifier
