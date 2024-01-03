@@ -97,7 +97,7 @@ val date = LocalDateTime.now().format(formatter)
 @RequiresApi(Build.VERSION_CODES.O)
 fun populateTransactions(){
     transactions.value .add(Transaction(59000.19, date,
-        "Xmas gift",TransactionType.DEBIT))
+        "PayCHECK",TransactionType.CREDIT))
     transactions.value.add(Transaction(130.00, date,"Juicy Crabs",
         TransactionType.DEBIT))
     transactions.value.add(Transaction(500.00, date,"Jet AutoShop",
@@ -110,15 +110,15 @@ fun populateTransactions(){
         TransactionType.DEBIT))
     transactions.value.add(Transaction(88.00, date,"UberEats",
         TransactionType.DEBIT))
-    transactions.value.add(Transaction(250.00, date,"Garden of Edens groceries",
-        TransactionType.DEBIT))
+    transactions.value.add(Transaction(250.00, date,"Garden of Edens Check",
+        TransactionType.CREDIT))
     transactions.value.add(Transaction(55.15, date,
         "Circle K Gas",TransactionType.DEBIT))
     transactions.value.add(Transaction(127.00,
         date,"Power Inc",
         TransactionType.DEBIT))
     transactions.value.add(Transaction(444.02, date,
-        "To Checking Account",TransactionType.DEBIT))
+        "To Checking Account",TransactionType.CREDIT))
     transactions.value.add(Transaction(67.00, date,
         "Juicy Grabs",TransactionType.DEBIT))
     transactions.value.add(Transaction(101.00,
@@ -128,7 +128,7 @@ fun populateTransactions(){
     transactions.value.add(Transaction(111.00,
         date,"Wild Goose Chase",TransactionType.DEBIT))
     transactions.value.add(Transaction(3467.19,
-        date,"Sony SmartTV",TransactionType.DEBIT))
+        date,"Sony Check",TransactionType.CREDIT))
     transactions.value.add(Transaction(130.00, date,
         "Doordash",TransactionType.DEBIT))
     transactions.value.add(Transaction(56.00,
@@ -139,7 +139,7 @@ fun populateTransactions(){
         "Locks haircuts",TransactionType.DEBIT))
     transactions.value.add(Transaction(447.19, date,
         "Google Store",TransactionType.DEBIT))
-    transactions.value.add(Transaction(150.00, date,"Juicy Grabs",
+    transactions.value.add(Transaction(150.00, date,"Juicy Crabs",
         TransactionType.DEBIT))
     transactions.value.add(Transaction(200.00, date,
         "Mehdi AutoRepairs",TransactionType.DEBIT))
@@ -159,7 +159,7 @@ fun populateTransactions(){
         "GoldStar haircuts",TransactionType.DEBIT))
     transactions.value.add(Transaction(59000.19,
         date,"To Savings",TransactionType.DEBIT))
-    transactions.value.add(Transaction(210.00, date,"Juicy Grabs",
+    transactions.value.add(Transaction(210.00, date,"Juicy Crabs",
         TransactionType.DEBIT))
     transactions.value.add(Transaction(650.00, date,
         "XSuits",TransactionType.DEBIT))
