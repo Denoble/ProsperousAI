@@ -78,7 +78,7 @@ fun TransactionScreen(
                         .background(Color.White)
 
                 ){
-                    items (viewModel.transactionList){transaction ->
+                    items (viewModel.transactionList.value){transaction ->
                         TransactionContent( transaction) {
                            /* appState.navController.navigate(""){
                                 launchSingleTop = true

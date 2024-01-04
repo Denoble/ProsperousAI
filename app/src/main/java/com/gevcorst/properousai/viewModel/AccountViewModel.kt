@@ -31,8 +31,8 @@ class AccountViewModel @Inject constructor() : ViewModel() {
     val toAccount = mutableStateOf("")
     val amountInputState = mutableStateOf("")
     val dropDownList = accountsDropDownList
-    val transactionList: MutableList<Transaction> = transactions.value
-    var checkingAccountsUIState = checkingAccountBalance
+    val transactionList = transactions
+    var checkingAccountsUIState =  checkingAccountBalance
         private set
     var familyAccountsUIState = familyAccountBalance
         private set
@@ -45,7 +45,7 @@ class AccountViewModel @Inject constructor() : ViewModel() {
         get() = familyAccountsUIState.value
 
     init {
-        populateTransactions()
+      getTransactions()
     }
 
     fun onAmountInputChange(newAmount: String) {
@@ -173,6 +173,13 @@ class AccountViewModel @Inject constructor() : ViewModel() {
         val transaction = Transaction(amount, date, des, transactionType)
         viewModelScope.launch {
             addTransaction(transaction, account, transactionType).collect {
+
+            }
+        }
+    }
+    private fun getTransactions(){
+        viewModelScope.launch {
+            transactions().collect{
 
             }
         }

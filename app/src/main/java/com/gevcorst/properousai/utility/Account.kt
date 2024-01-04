@@ -50,16 +50,18 @@ suspend fun addTransaction(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 suspend fun transactions(): Flow<List<Transaction>> = flow {
-    mutex.lock()
+    populateTransactions()
     try {
         emit(transactions.value)
     } catch (e: Exception) {
         Log.d("GetTransaction", e.stackTraceToString())
         emit(emptyList())
-    } finally {
-        mutex.unlock()
     }
+}
+suspend fun balance(account: MutableDoubleState):Flow<Double> = flow{
+    emit(account.value)
 }
 
 private suspend fun debit(
