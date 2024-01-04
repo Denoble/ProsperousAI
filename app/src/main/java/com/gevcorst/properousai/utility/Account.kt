@@ -17,6 +17,7 @@ import java.util.Currency
 import java.util.Locale
 
 private val mutex = Mutex()
+val canProceed = mutableStateOf(true)
 
 
 suspend fun addTransaction(
@@ -28,7 +29,9 @@ suspend fun addTransaction(
         when (type) {
             TransactionType.CREDIT -> {
                 credit(transaction, account).collect() {
-                    account.value = it
+                    if (canProceed.value)
+                        account.value = it
+                    else canProceed.value = true
                 }
             }
 
@@ -37,6 +40,8 @@ suspend fun addTransaction(
                     debit(transaction, account).collect {
                         account.value = it
                     }
+                } else {
+                    canProceed.value = false
                 }
             }
         }
@@ -60,7 +65,8 @@ suspend fun transactions(): Flow<List<Transaction>> = flow {
         emit(emptyList())
     }
 }
-suspend fun balance(account: MutableDoubleState):Flow<Double> = flow{
+
+suspend fun balance(account: MutableDoubleState): Flow<Double> = flow {
     emit(account.value)
 }
 
@@ -92,81 +98,224 @@ val accountsDropDownList = listOf<String>(
     AccountType.CHECKING.name, AccountType.FAMILY.name,
     AccountType.SAVINGS.name
 )
+
 @RequiresApi(Build.VERSION_CODES.O)
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
 @RequiresApi(Build.VERSION_CODES.O)
 val date = LocalDateTime.now().format(formatter)
+
 @RequiresApi(Build.VERSION_CODES.O)
-fun populateTransactions(){
-    transactions.value .add(Transaction(59000.19, date,
-        "PayCHECK",TransactionType.CREDIT))
-    transactions.value.add(Transaction(130.00, date,"Juicy Crabs",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(500.00, date,"Jet AutoShop",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(40.5, date,"Chevron Gas",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(137.00, date,"GoldStar haircuts",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(1000.88, date,"Family",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(88.00, date,"UberEats",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(250.00, date,"Garden of Edens Check",
-        TransactionType.CREDIT))
-    transactions.value.add(Transaction(55.15, date,
-        "Circle K Gas",TransactionType.DEBIT))
-    transactions.value.add(Transaction(127.00,
-        date,"Power Inc",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(444.02, date,
-        "To Checking Account",TransactionType.CREDIT))
-    transactions.value.add(Transaction(67.00, date,
-        "Juicy Grabs",TransactionType.DEBIT))
-    transactions.value.add(Transaction(101.00,
-        date,"Landland Bar",TransactionType.DEBIT))
-    transactions.value.add(Transaction(55.0, date,
-        "Urban Planet GYM",TransactionType.DEBIT))
-    transactions.value.add(Transaction(111.00,
-        date,"Wild Goose Chase",TransactionType.DEBIT))
-    transactions.value.add(Transaction(3467.19,
-        date,"Sony Check",TransactionType.CREDIT))
-    transactions.value.add(Transaction(130.00, date,
-        "Doordash",TransactionType.DEBIT))
-    transactions.value.add(Transaction(56.00,
-        date,"Uber",TransactionType.DEBIT))
-    transactions.value.add(Transaction(40.5,
-        date,"Chevron Gas",TransactionType.DEBIT))
-    transactions.value.add(Transaction(137.00, date,
-        "Locks haircuts",TransactionType.DEBIT))
-    transactions.value.add(Transaction(447.19, date,
-        "Google Store",TransactionType.DEBIT))
-    transactions.value.add(Transaction(150.00, date,"Juicy Crabs",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(200.00, date,
-        "Mehdi AutoRepairs",TransactionType.DEBIT))
-    transactions.value.add(Transaction(230.5, date,
-        "MamaCare Restaurant",TransactionType.DEBIT))
-    transactions.value.add(Transaction(111.00,
-        date,"A's Lounge",TransactionType.DEBIT))
-    transactions.value.add(Transaction(15.19,
-        date,"Car wash",TransactionType.DEBIT))
-    transactions.value.add(Transaction(137.00, date,
-        "Safeway Groceries",TransactionType.DEBIT))
-    transactions.value.add(Transaction(550.00,
-        date,"Eye Care",TransactionType.DEBIT))
-    transactions.value.add(Transaction(48.45, date,
-        "Chevron Gas",TransactionType.DEBIT))
-    transactions.value.add(Transaction(123.00, date,
-        "GoldStar haircuts",TransactionType.DEBIT))
-    transactions.value.add(Transaction(59000.19,
-        date,"To Savings",TransactionType.DEBIT))
-    transactions.value.add(Transaction(210.00, date,"Juicy Crabs",
-        TransactionType.DEBIT))
-    transactions.value.add(Transaction(650.00, date,
-        "XSuits",TransactionType.DEBIT))
-    transactions.value.add(Transaction(120.45, date,
-        "Footlocker",TransactionType.DEBIT))
-    transactions.value.add(Transaction(164.00, date,"Dental Care",
-        TransactionType.DEBIT))
+fun populateTransactions() {
+    transactions.value.add(
+        Transaction(
+            59000.19, date,
+            "PayCHECK", TransactionType.CREDIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            130.00, date, "Juicy Crabs",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            500.00, date, "Jet AutoShop",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            40.5, date, "Chevron Gas",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            137.00, date, "GoldStar haircuts",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            1000.88, date, "Family",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            88.00, date, "UberEats",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            250.00, date, "Garden of Edens Check",
+            TransactionType.CREDIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            55.15, date,
+            "Circle K Gas", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            127.00,
+            date, "Power Inc",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            444.02, date,
+            "To Checking Account", TransactionType.CREDIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            67.00, date,
+            "Juicy Grabs", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            101.00,
+            date, "Landland Bar", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            55.0, date,
+            "Urban Planet GYM", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            111.00,
+            date, "Wild Goose Chase", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            3467.19,
+            date, "Sony Check", TransactionType.CREDIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            130.00, date,
+            "Doordash", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            56.00,
+            date, "Uber", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            40.5,
+            date, "Chevron Gas", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            137.00, date,
+            "Locks haircuts", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            447.19, date,
+            "Google Store", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            150.00, date, "Juicy Crabs",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            200.00, date,
+            "Mehdi AutoRepairs", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            230.5, date,
+            "MamaCare Restaurant", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            111.00,
+            date, "A's Lounge", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            15.19,
+            date, "Car wash", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            137.00, date,
+            "Safeway Groceries", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            550.00,
+            date, "Eye Care", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            48.45, date,
+            "Chevron Gas", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            123.00, date,
+            "GoldStar haircuts", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            59000.19,
+            date, "To Savings", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            210.00, date, "Juicy Crabs",
+            TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            650.00, date,
+            "XSuits", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            120.45, date,
+            "Footlocker", TransactionType.DEBIT
+        )
+    )
+    transactions.value.add(
+        Transaction(
+            164.00, date, "Dental Care",
+            TransactionType.DEBIT
+        )
+    )
 }

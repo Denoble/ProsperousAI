@@ -36,7 +36,7 @@ fun BottomNavigationBar(appState: AppState ,
                 label = { Text(text = screen.route) },
                 selected = currentRoute == screen.route,
                 onClick = {
-                    appState.navigate(screen.route)
+                    appState.navigateAndPopUp(screen.route,screen.route)
                 },
                 colors = NavigationBarItemDefaults.colors(selectedIconColor = Color.White,
                     unselectedIconColor = Color.Gray))
